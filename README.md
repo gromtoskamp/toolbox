@@ -8,4 +8,4 @@ Make sure SqlFormatter is snuggly sitting in the lib/ folder.
 
 Thats it! Now you can use T:: functions from anywhere in the code. 
 A simple example: 
-T::dexit(Mage::getModel('catalog/product')->getCollection));
+T::dexit(Mage::getModel('catalog/product')->getCollection());
