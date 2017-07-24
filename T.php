@@ -1,6 +1,6 @@
 <?php
 
-require_once 'SqlFormatter.php';
+require_once 'lib/SqlFormatter.php';
 
 /**
  * Class Toolbox
@@ -26,6 +26,8 @@ class T {
     const PERFMID   = 'mid';
 
     public static $test;
+
+    const TEMPLATE_PATH = __DIR__ . '/design';
 
     /**
      * Toolbox constructor.
@@ -316,13 +318,14 @@ class T {
 
     /**
      * Get previous function called and return the function name.
-     *T::
+     *
      * @param int $stepsBack
      * @param bool $returnPath
      * @return String
      * @throws Exception
      */
-    public static function getPreviousFunction($stepsBack = 2, $returnPath = true) {
+    public static function getPreviousFunction($stepsBack = 2, $returnPath = true)
+    {
         $backTrace = debug_backtrace();
         if (!isset($backTrace[$stepsBack])) {
             //I just cant even.
@@ -337,6 +340,62 @@ class T {
 
         return $previousFunction;
     }
+
+    /**
+     * Prints the previous function in the debug backtrace tree.
+     * If $search is provided, will only print and die when $search is found in any of the filenames
+     * If $ignoreTemplates == true, will ignore references to template files.
+     *
+     * @param null $search
+     * @param bool $ignoreTemplates
+     *
+     * @throws Exception
+     */
+    public static function printPreviousFunction($search = null, $ignoreTemplates = true)
+    {
+        if (!$search) {
+            echo '<pre>';
+            print_r(array(
+                T::getPreviousFunction(3)
+            ));
+            exit;
+        }
+
+        foreach (debug_backtrace() as $backTrace) {
+            if (stripos($backTrace['file'], $search) !== false) {
+                if ($ignoreTemplates && strpos($backTrace['file'], self::TEMPLATE_PATH) === 0) {
+                    continue;
+                }
+
+                echo '<pre>';
+                print_r(array(
+                    T::getPreviousFunction(3)
+                ));
+                exit;
+
+            }
+        }
+    }
+
+    public static function printBackTrace()
+    {
+        echo '<table>';
+        echo '<th style="font-weight: bold; padding: 2px;">File</th>';
+        echo '<th style="font-weight: bold" padding: 2px;>Function</th>';
+        echo '<th style="font-weight: bold" padding: 2px;>Line</th>';
+
+        foreach (debug_backtrace() as $backTrace) {
+            $fileName = str_replace(__DIR__ . '/', '', $backTrace['file']);
+            echo '<tr>';
+            echo '<td style="padding: 2px;">' . $fileName . '</td>';
+            echo '<td style="padding: 2px;">' . $backTrace['function'] . '</td>';
+            echo '<td style="padding: 2px;">' . $backTrace['line'] . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+        exit;
+    }
+
 
     /**
      * Get random object of the provided type. Mainly used for testing purposes.
@@ -598,6 +657,4 @@ class T {
     {
         return Mage::registry($val);
     }
-
 }
-
