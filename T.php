@@ -377,19 +377,22 @@ class T {
         }
     }
 
+    /**
+     * Prints a backtrace without locking the entire browser up.
+     */
     public static function printBackTrace()
     {
         echo '<table>';
-        echo '<th style="font-weight: bold; padding: 2px;">File</th>';
-        echo '<th style="font-weight: bold" padding: 2px;>Function</th>';
-        echo '<th style="font-weight: bold" padding: 2px;>Line</th>';
+        echo '<th style="background-color: rgba(255,255,0,0.1); border:1px solid; font-weight: bold; padding: 5px;">File</th>';
+        echo '<th style="background-color: rgba(255,255,0,0.1); border:1px solid; font-weight: bold; padding: 5px;">Function</th>';
+        echo '<th style="background-color: rgba(255,255,0,0.1); border:1px solid; font-weight: bold; padding: 5px;">Line</th>';
 
         foreach (debug_backtrace() as $backTrace) {
             $fileName = str_replace(__DIR__ . '/', '', $backTrace['file']);
             echo '<tr>';
-            echo '<td style="padding: 2px;">' . $fileName . '</td>';
-            echo '<td style="padding: 2px;">' . $backTrace['function'] . '</td>';
-            echo '<td style="padding: 2px;">' . $backTrace['line'] . '</td>';
+            echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;">' . $fileName . '</td>';
+            echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;">' . $backTrace['function'] . '</td>';
+            echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;"> #' . $backTrace['line'] . '</td>';
             echo '</tr>';
         }
         echo '</table>';
