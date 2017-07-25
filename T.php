@@ -390,7 +390,19 @@ class T {
         foreach (debug_backtrace() as $backTrace) {
             $fileName = str_replace(__DIR__ . '/', '', $backTrace['file']);
             echo '<tr>';
-            echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;">' . $fileName . '</td>';
+            echo '<td onclick="let selection = window.getSelection();
+                        let range = document.createRange();
+                        range.selectNodeContents(this);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                        execCommand(\'copy\');"
+                      style="
+                        background-color: rgba(0,0,0,0.05);
+                        padding: 5px;
+                        border:1px solid;"
+                      >'
+                . $fileName
+                . '</td>';
             echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;">' . $backTrace['function'] . '</td>';
             echo '<td style="background-color: rgba(0,0,0,0.05); padding: 5px; border:1px solid;"> #' . $backTrace['line'] . '</td>';
             echo '</tr>';
